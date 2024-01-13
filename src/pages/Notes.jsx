@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { BsPlusLg } from "react-icons/bs";
 import { Link } from "react-router-dom";
@@ -6,14 +6,30 @@ import NoteItem from "../components/NoteItem";
 import { useGlobalContext } from "../AppContext";
 
 const Notes = () => {
-  const { notes } = useGlobalContext();
+  const { notes, search } = useGlobalContext();
+
+  const [isSearch, setIsSearch] = useState(false);
+  const [searchText, setSearchText] = useState("");
+
+  const onChangeHandler = (e) => {
+    setSearchText(e.target.value);
+    search(e.target.value);
+  };
 
   return (
     <section>
       <header className="notes__header">
-        <h2>My Notes</h2>
-        {/* <input type="text" autoFocus placeholder="Keywords..." /> */}
-        <button className="btn">
+        {isSearch || <h2>My Notes</h2>}
+        {isSearch && (
+          <input
+            type="text"
+            autoFocus
+            placeholder="Keywords..."
+            value={searchText}
+            onChange={onChangeHandler}
+          />
+        )}
+        <button className="btn" onClick={() => setIsSearch(!isSearch)}>
           <CiSearch />
         </button>
       </header>

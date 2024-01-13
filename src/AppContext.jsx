@@ -43,17 +43,28 @@ export const AppProvider = ({ children }) => {
   };
 
   const deleteNote = (id) => {
-    console.log(id);
     let fetchNotes = localStorage.getItem("notes");
     let dbNotes = [];
     if (fetchNotes) {
       dbNotes = JSON.parse(fetchNotes);
       let newNotes = dbNotes.filter((item) => {
-        console.log(item.id);
         return !(item.id === id);
       });
       localStorage.setItem("notes", JSON.stringify(newNotes));
       setNotes(newNotes);
+    }
+  };
+
+  const search = (text) => {
+    if (text) {
+      let newNotes = notes.filter((item) => {
+        return item.title
+          .toLocaleLowerCase()
+          .includes(text.toLocaleLowerCase());
+      });
+      setNotes(newNotes);
+    } else {
+      fetchNotes();
     }
   };
 
@@ -68,7 +79,7 @@ export const AppProvider = ({ children }) => {
 
   return (
     <ApplicationContext.Provider
-      value={{ notes, AddNewNote, saveNotes, updateNotes, deleteNote }}
+      value={{ notes, AddNewNote, saveNotes, updateNotes, deleteNote, search }}
     >
       {children}
     </ApplicationContext.Provider>

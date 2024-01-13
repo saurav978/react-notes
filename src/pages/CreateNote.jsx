@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { v4 as uuid } from "uuid";
 import useFormattedDate from "../hooks/useFormattedDate";
@@ -12,6 +12,8 @@ const CreateNote = () => {
 
   const { AddNewNote, saveNotes } = useGlobalContext();
 
+  const navigate = useNavigate();
+
   const submitHandler = (e) => {
     e.preventDefault();
     const note = { id: uuid(), title, details, date };
@@ -19,6 +21,7 @@ const CreateNote = () => {
     setDetails("");
     setTitle("");
     saveNotes(note);
+    navigate("/");
   };
 
   return (

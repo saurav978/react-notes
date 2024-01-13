@@ -17,6 +17,7 @@ const EditNote = () => {
 
   const saveHandler = () => {
     let note = { id: idObj.id, title, details, date };
+    navigate("/");
     updateNotes(note);
   };
 
