@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ApplicationContext = createContext();
 
@@ -25,6 +26,37 @@ export const AppProvider = ({ children }) => {
     localStorage.setItem("notes", JSON.stringify(dbNotes));
   };
 
+  const updateNotes = (note) => {
+    let fetchNotes = localStorage.getItem("notes");
+    let dbNotes = [];
+    if (fetchNotes) {
+      dbNotes = JSON.parse(fetchNotes);
+      dbNotes.forEach((element) => {
+        if (element.id === note.id) {
+          element.title = note.title;
+          element.details = note.details;
+        }
+      });
+    }
+    localStorage.setItem("notes", JSON.stringify(dbNotes));
+    setNotes(dbNotes);
+  };
+
+  const deleteNote = (id) => {
+    console.log(id);
+    let fetchNotes = localStorage.getItem("notes");
+    let dbNotes = [];
+    if (fetchNotes) {
+      dbNotes = JSON.parse(fetchNotes);
+      let newNotes = dbNotes.filter((item) => {
+        console.log(item.id);
+        return !(item.id === id);
+      });
+      localStorage.setItem("notes", JSON.stringify(newNotes));
+      setNotes(newNotes);
+    }
+  };
+
   const fetchNotes = () => {
     let fetchNotes = localStorage.getItem("notes");
     setNotes(JSON.parse(fetchNotes));
@@ -35,7 +67,9 @@ export const AppProvider = ({ children }) => {
   }, []);
 
   return (
-    <ApplicationContext.Provider value={{ notes, AddNewNote, saveNotes }}>
+    <ApplicationContext.Provider
+      value={{ notes, AddNewNote, saveNotes, updateNotes, deleteNote }}
+    >
       {children}
     </ApplicationContext.Provider>
   );
